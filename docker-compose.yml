@@ -1,0 +1,66 @@
+# ============================================
+# Docker Compose — Admin Full Stack
+# ============================================
+
+services:
+  # ---- Frontend: Development ----
+  frontend-dev:
+    build:
+      context: .
+      dockerfile: ./docker_images/Dockerfile
+      target: development
+    container_name: admin-frontend-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    networks:
+      - admin-net
+
+  # ---- Frontend: Production ----
+  frontend-prod:
+    build:
+      context: .
+      dockerfile: ./docker_images/Dockerfile
+      target: production
+    container_name: admin-frontend-prod
+    ports:
+      - "3030:80"
+    networks:
+      - admin-net
+
+  # ---- Laravel (future) ----
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   container_name: admin-backend
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - DB_HOST=db
+  #   networks:
+  #     - admin-net
+
+  # ---- Database (future) ----
+  # db:
+  #   image: mysql:8
+  #   container_name: admin-db
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: secret
+  #     MYSQL_DATABASE: admin
+  #   volumes:
+  #     - db-data:/var/lib/mysql
+  #   networks:
+  #     - admin-net
+
+networks:
+  admin-net:
+    driver: bridge
+
+# volumes:
+#   db-data:

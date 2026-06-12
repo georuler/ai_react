@@ -1,0 +1,55 @@
+﻿@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Segoe UI', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #0f1119;
+  color: #e8eaf0;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a2d3e; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #353849; }
+
+.sidebar-nav-item {
+  display: flex; align-items: center; gap: 12px; padding: 11px 14px;
+  border-radius: 10px; cursor: pointer; transition: all 0.2s ease;
+  color: #9ca3b8; font-size: 0.9rem; font-weight: 500;
+  position: relative; user-select: none; margin-bottom: 2px;
+}
+.sidebar-nav-item:hover { background: #2a2d3e; color: #e8eaf0; }
+.sidebar-nav-item.active { background: rgba(108,92,231,0.2); color: #a29bfe; font-weight: 600; }
+.sidebar-nav-item.active::before {
+  content: ""; position: absolute; left: 0; top: 50%;
+  transform: translateY(-50%); width: 3px; height: 20px;
+  background: #6c5ce7; border-radius: 0 3px 3px 0;
+}
+
+.submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding-left: 46px; }
+.submenu.open { max-height: 300px; }
+.submenu-item { padding: 9px 14px; border-radius: 6px; cursor: pointer; color: #6b7280; font-size: 0.85rem; transition: all 0.2s ease; margin-bottom: 1px; }
+.submenu-item:hover { color: #e8eaf0; background: #2a2d3e; }
+.submenu-item.active { color: #a29bfe; background: rgba(108,92,231,0.2); }
+.submenu-arrow { transition: transform 0.2s ease; }
+.submenu-arrow.open { transform: rotate(90deg); }
+
+#sidebar.collapsed { width: 64px; }
+#sidebar.collapsed .sidebar-nav-item span:not(.material-symbols-outlined),
+#sidebar.collapsed .submenu, #sidebar.collapsed .submenu-arrow { display: none; }
+#sidebar.collapsed .sidebar-nav-item { justify-content: center; padding: 12px; }
+
+.notice-row td { background: rgba(108,92,231,0.04); }
+.notice-row:hover td { background: #2a2d3e !important; }
+
+.page-btn {
+  display: flex; align-items: center; justify-content: center;
+  min-width: 38px; height: 38px; padding: 0 6px; border: none;
+  background: transparent; color: #9ca3b8; border-radius: 6px;
+  font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s ease;
+}
+.page-btn:hover:not(:disabled):not(.active) { background: #2a2d3e; color: #e8eaf0; }

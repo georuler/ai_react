@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'bg-primary': '#0f1119',
+                        'bg-secondary': '#161822',
+                        'bg-tertiary': '#1c1f2e',
+                        'bg-hover': '#2a2d3e',
+                        'accent': '#6c5ce7',
+                        'accent-light': '#a29bfe',
+                        'border-color': '#2a2d3e',
+                        'border-light': '#353849',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-[#0f1119] text-[#e8eaf0] font-['Segoe_UI','Noto_Sans_KR',-apple-system,BlinkMacSystemFont,sans-serif] antialiased min-h-screen flex items-center justify-center p-4">
+
+    <!-- Background Decoration -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-accent-light/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="relative w-full max-w-[420px]">
+        <!-- Logo -->
+        <div class="flex flex-col items-center mb-8">
+            <div class="w-16 h-16 bg-gradient-to-br from-accent to-accent-light rounded-2xl flex items-center justify-center mb-4 shadow-[0_8px_32px_rgba(108,92,231,0.35)]">
+                <span class="material-symbols-outlined text-[32px] text-white">admin_panel_settings</span>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight">
+                Admin<span class="text-accent">Panel</span>
+            </h1>
+            <p class="text-[#6b7280] text-sm mt-1">관리자 페이지에 오신 것을 환영합니다</p>
+        </div>
+
+        <!-- Card -->
+        <div class="bg-bg-secondary border border-border-color rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.5)] p-8">
+            <form action="list.html" method="get" class="space-y-5">
+
+                <!-- ID -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#9ca3b8] mb-2">아이디</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-xl text-[#6b7280]">person</span>
+                        <input type="text" placeholder="아이디를 입력하세요"
+                            class="w-full pl-[42px] pr-4 py-2.5 bg-bg-tertiary border border-border-color rounded-lg text-[#e8eaf0] text-sm outline-none transition-all focus:border-accent focus:ring-[3px] focus:ring-accent/20 placeholder:text-[#6b7280]">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label class="block text-sm font-semibold text-[#9ca3b8] mb-2">비밀번호</label>
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-xl text-[#6b7280]">lock</span>
+                        <input type="password" placeholder="비밀번호를 입력하세요"
+                            class="w-full pl-[42px] pr-12 py-2.5 bg-bg-tertiary border border-border-color rounded-lg text-[#e8eaf0] text-sm outline-none transition-all focus:border-accent focus:ring-[3px] focus:ring-accent/20 placeholder:text-[#6b7280]">
+                        <button type="button" title="비밀번호 표시"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b7280] hover:text-[#9ca3b8] transition-colors">
+                            <span class="material-symbols-outlined text-xl">visibility_off</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember & Find -->
+                <div class="flex items-center justify-between text-sm">
+                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                        <input type="checkbox" class="peer sr-only">
+                        <span class="w-4 h-4 border-2 border-border-color rounded peer-checked:bg-accent peer-checked:border-accent flex items-center justify-center transition-all">
+                            <span class="material-symbols-outlined text-white text-xs hidden peer-checked:block">check</span>
+                        </span>
+                        <span class="text-[#9ca3b8]">로그인 상태 유지</span>
+                    </label>
+                    <a href="#" class="text-accent-light hover:text-accent transition-colors">비밀번호 찾기</a>
+                </div>
+
+                <!-- Login Button -->
+                <button type="submit"
+                    class="w-full flex items-center justify-center gap-2 py-3 bg-accent text-white rounded-lg text-sm font-semibold transition-all shadow-[0_4px_15px_rgba(108,92,231,0.2)] hover:bg-[#7c6ff7] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(108,92,231,0.4)] active:translate-y-0">
+                    <span class="material-symbols-outlined text-lg">login</span>
+                    로그인
+                </button>
+
+                <!-- Divider -->
+                <div class="relative flex items-center gap-3">
+                    <span class="flex-1 h-px bg-border-color"></span>
+                    <span class="text-xs text-[#6b7280]">또는</span>
+                    <span class="flex-1 h-px bg-border-color"></span>
+                </div>
+
+                <!-- Social Login -->
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button"
+                        class="flex items-center justify-center gap-1.5 py-2.5 bg-bg-tertiary border border-border-color rounded-lg text-sm text-[#9ca3b8] hover:bg-bg-hover hover:text-[#e8eaf0] transition-all">
+                        <span class="font-bold text-[#fbbf24]">G</span>
+                        Google
+                    </button>
+                    <button type="button"
+                        class="flex items-center justify-center gap-1.5 py-2.5 bg-bg-tertiary border border-border-color rounded-lg text-sm text-[#9ca3b8] hover:bg-bg-hover hover:text-[#e8eaf0] transition-all">
+                        <span class="font-bold text-[#60a5fa]">N</span>
+                        Naver
+                    </button>
+                    <button type="button"
+                        class="flex items-center justify-center gap-1.5 py-2.5 bg-bg-tertiary border border-border-color rounded-lg text-sm text-[#9ca3b8] hover:bg-bg-hover hover:text-[#e8eaf0] transition-all">
+                        <span class="font-bold text-[#facc15]">K</span>
+                        Kakao
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Footer -->
+        <p class="text-center text-xs text-[#6b7280] mt-6">
+            © 2026 AdminPanel. All rights reserved.
+        </p>
+    </div>
+
+</body>
+</html>
