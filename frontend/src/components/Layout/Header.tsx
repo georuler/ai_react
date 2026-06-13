@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useSidebarStore } from '@/stores/sidebarStore';
 
 export default function Header() {
@@ -13,12 +14,12 @@ export default function Header() {
         >
           <span className="material-symbols-outlined">menu</span>
         </button>
-        <div className="flex items-center gap-2.5">
+        <Link to="/dashboard" className="flex items-center gap-2.5 no-underline">
           <span className="material-symbols-outlined text-[28px] text-accent">admin_panel_settings</span>
           <span className="text-lg font-bold tracking-tight">
             Admin<span className="text-accent">Panel</span>
           </span>
-        </div>
+        </Link>
       </div>
 
       {/* Right */}
