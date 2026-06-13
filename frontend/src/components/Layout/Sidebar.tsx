@@ -23,7 +23,7 @@ const menuItems: MenuItem[] = [
     submenus: [
       { id: 'notice', label: '공지사항', path: '/notices' },
       // { id: 'free', label: '자유게시판', path: '/boards/free' },
-      { id: 'qna', label: 'Q&A', path: '/boards/qna' },
+      { id: 'qna', label: 'Q&A', path: '/qnas' },
       { id: 'faq', label: 'FAQ', path: '/boards/faq' },
     ],
   },

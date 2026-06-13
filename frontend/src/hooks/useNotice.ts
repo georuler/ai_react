@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchNotice } from '@/api/notice';
+import { fetchNotice } from '@/services/notice';
 
 export function useNotice(id: number) {
   return useQuery({

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchUsers } from '@/api/user';
+import { fetchUsers } from '@/services/user';
 import type { UserListParams } from '@/types/user';
 
 export function useUsers(params: UserListParams) {

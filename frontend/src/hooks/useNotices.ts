@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchNotices } from '@/api/notice';
+import { fetchNotices } from '@/services/notice';
 import type { NoticeListParams } from '@/types/notice';
 
 export function useNotices(params: NoticeListParams) {

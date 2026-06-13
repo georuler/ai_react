@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useNotices } from '@/hooks/useNotices';
-import { deleteNotice } from '@/services/notice';
+import { useQnas } from '@/hooks/useQnas';
+import { deleteQna } from '@/services/qna';
 import { useDeleteConfirm } from '@/hooks/useDeleteConfirm';
 import Pagination from '@/components/pagination/Pagination';
-import type { Notice } from '@/types/notice';
+import type { Qna } from '@/types/qna';
 
-/** ISO 날짜를 YYYY-MM-DD 형식으로 변환 */
 function formatDate(iso: string): string {
   return iso.slice(0, 10);
 }
 
-/** API 에러에서 message 추출 */
 function getErrorMessage(err: unknown): string {
   if (err && typeof err === 'object' && 'response' in err) {
     const axiosErr = err as { response?: { data?: { message?: string } } };
@@ -20,14 +18,14 @@ function getErrorMessage(err: unknown): string {
   return '데이터를 불러오는데 실패했습니다.';
 }
 
-export default function NoticeList() {
+export default function QnaList() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState('');
   const [searchType, setSearchType] = useState<'subject' | 'content'>('subject');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchTypeQuery, setSearchTypeQuery] = useState<'subject' | 'content'>('subject');
 
-  const { data, isLoading, isError, error, refetch } = useNotices({
+  const { data, isLoading, isError, error, refetch } = useQnas({
     page,
     per_page: 10,
     search_text: searchQuery,
@@ -35,13 +33,12 @@ export default function NoticeList() {
   });
 
   const { requestDelete, DeleteConfirmModal } = useDeleteConfirm({
-    onDelete: deleteNotice,
+    onDelete: deleteQna,
     onSuccess: () => refetch(),
   });
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-
     setPage(1);
     setSearchQuery(search);
     setSearchTypeQuery(searchType);
@@ -49,20 +46,18 @@ export default function NoticeList() {
 
   return (
     <>
-      {/* Page Header */}
       <div className="flex items-center justify-between mb-7">
         <h1 className="text-2xl font-bold tracking-tight">
-          공지사항
+          Q&A
           {data && <span className="ml-2 text-base font-normal text-[#6b7280]">({data.meta.total.toLocaleString()})</span>}
         </h1>
         <div className="flex items-center gap-1.5 text-[0.85rem] text-[#6b7280]">
           <span>게시판 관리</span>
           <span className="material-symbols-outlined text-base">chevron_right</span>
-          <span className="text-accent-light font-medium">공지사항</span>
+          <span className="text-accent-light font-medium">Q&A</span>
         </div>
       </div>
 
-      {/* Board Controls */}
       <div className="flex items-center justify-between mb-5 flex-wrap gap-3">
         <form onSubmit={handleSearch} className="flex items-center gap-2.5">
           <select
@@ -91,13 +86,12 @@ export default function NoticeList() {
           </button>
         </form>
 
-        <Link to="/notices/new" className="flex items-center gap-1.5 px-5 py-2.5 bg-accent text-white rounded-lg text-sm font-semibold transition-all shadow-[0_4px_15px_rgba(108,92,231,0.2)] hover:bg-[#7c6ff7] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(108,92,231,0.4)] active:translate-y-0 no-underline">
+        <Link to="/qnas/new" className="flex items-center gap-1.5 px-5 py-2.5 bg-accent text-white rounded-lg text-sm font-semibold transition-all shadow-[0_4px_15px_rgba(108,92,231,0.2)] hover:bg-[#7c6ff7] hover:-translate-y-px hover:shadow-[0_6px_20px_rgba(108,92,231,0.4)] active:translate-y-0 no-underline">
           <span className="material-symbols-outlined text-lg">edit</span>
-          글쓰기
+          질문하기
         </Link>
       </div>
 
-      {/* Board Table */}
       <div className="bg-bg-secondary border border-border-color rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
         <table className="w-full border-collapse table-fixed">
           <thead>
@@ -126,33 +120,34 @@ export default function NoticeList() {
                 </td>
               </tr>
             ) : data && data.data.length > 0 ? (
-              data.data.map((notice: Notice) => (
-                <tr key={notice.id} className="transition-colors hover:bg-bg-hover">
+              data.data.map((qna: Qna) => (
+                <tr key={qna.id} className="transition-colors hover:bg-bg-hover">
                   <td className="text-center px-4 py-3.5 border-b border-border-color">
-                    <span className="text-sm">{notice.id}</span>
+                    <span className="text-sm">{qna.id}</span>
                   </td>
                   <td className="text-center px-4 py-3.5 border-b border-border-color">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-                      notice.use === 'Y' ? 'bg-accent/10 text-accent-light border border-accent/30' : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
+                      qna.use === 'Y' ? 'bg-accent/10 text-accent-light border border-accent/30' : 'bg-slate-500/10 text-slate-400 border border-slate-500/20'
                     }`}>
-                      {notice.use === 'Y' ? '사용' : '미사용'}
+                      {qna.use === 'Y' ? '사용' : '미사용'}
                     </span>
                   </td>
                   <td className="px-4 py-3.5 border-b border-border-color font-medium transition-colors text-sm truncate">
-                    <Link to={`/notices/${notice.id}`} className="hover:text-accent-light transition-colors text-[#e8eaf0] no-underline">
-                      {notice.subject}
+                    <Link to={`/qnas/${qna.id}`} className="hover:text-accent-light transition-colors text-[#e8eaf0] no-underline">
+                      {qna.answer ? <span className="inline-flex items-center px-1.5 py-0.5 bg-accent/20 text-accent-light rounded text-xs font-bold mr-1.5">답변</span> : null}
+                      {qna.subject}
                     </Link>
                   </td>
-                  <td className="px-4 py-3.5 border-b border-border-color text-sm truncate">{notice.user.name}</td>
-                  <td className="px-4 py-3.5 border-b border-border-color text-sm">{formatDate(notice.created_at)}</td>
+                  <td className="px-4 py-3.5 border-b border-border-color text-sm truncate">{qna.user.name}</td>
+                  <td className="px-4 py-3.5 border-b border-border-color text-sm">{formatDate(qna.created_at)}</td>
                   <td className="text-center px-4 py-3.5 border-b border-border-color">
-                    <div className="flex items-center justify-center gap-2 pr-5">
-                      <Link to={`/notices/${notice.id}/edit`} className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-bg-tertiary border border-border-color text-[#9ca3b8] rounded-md text-sm font-medium hover:bg-bg-hover hover:text-[#e8eaf0] transition-all no-underline whitespace-nowrap">
+                    <div className="flex items-center justify-center gap-2">
+                      <Link to={`/qnas/${qna.id}/edit`} className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-bg-tertiary border border-border-color text-[#9ca3b8] rounded-md text-sm font-medium hover:bg-bg-hover hover:text-[#e8eaf0] transition-all no-underline whitespace-nowrap">
                         <span className="material-symbols-outlined text-base">edit</span>
                         수정
                       </Link>
                       <button
-                        onClick={() => requestDelete(notice.id)}
+                        onClick={() => requestDelete(qna.id)}
                         className="inline-flex items-center gap-1 px-3.5 py-1.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-md text-sm font-medium hover:bg-red-500/20 transition-all whitespace-nowrap"
                       >
                         <span className="material-symbols-outlined text-base">delete</span>
@@ -166,7 +161,7 @@ export default function NoticeList() {
               <tr>
                 <td colSpan={6} className="text-center py-16 text-[#6b7280]">
                   <span className="material-symbols-outlined text-4xl mb-3 block">inbox</span>
-                  등록된 공지사항이 없습니다.
+                  등록된 Q&A가 없습니다.
                 </td>
               </tr>
             )}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useUsers } from '@/hooks/useUsers';
-import apiClient from '@/api/client';
+import apiClient from '@/services/client';
 import AlertModal from '@/components/modal/AlertModal';
 
 interface UserFormData {

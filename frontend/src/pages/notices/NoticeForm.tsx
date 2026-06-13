@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
-import { createNotice, updateNotice } from '@/api/notice';
+import { createNotice, updateNotice } from '@/services/notice';
 import { useNotice } from '@/hooks/useNotice';
 import AlertModal from '@/components/modal/AlertModal';
 
