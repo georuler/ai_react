@@ -6,15 +6,6 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  withCredentials: true, // Sanctum SPA 인증용
-});
-
-// 요청 인터셉터 - CSRF 토큰
-apiClient.interceptors.request.use(async (config) => {
-  if (config.method !== 'get' && config.method !== 'head') {
-    await axios.get('/sanctum/csrf-cookie');
-  }
-  return config;
 });
 
 // 응답 인터셉터 - 에러 처리
