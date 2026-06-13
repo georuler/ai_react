@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AdminLayout from '@/components/Layout/AdminLayout';
-import NoticeList from '@/pages/notices/List';
-import NoticeView from '@/pages/notices/View';
-import NoticeForm from '@/pages/notices/Form';
+import NoticeList from '@/pages/notices/NoticeList';
+import NoticeView from '@/pages/notices/NoticeView';
+import NoticeForm from '@/pages/notices/NoticeForm';
+import UserList from '@/pages/users/UserList';
+import UserView from '@/pages/users/UserView';
+import UserForm from '@/pages/users/UserForm';
 
 function Dashboard() {
   return (
@@ -43,7 +46,12 @@ export default function App() {
             <Route path=":id" element={<NoticeView />} />
             <Route path=":id/edit" element={<NoticeForm />} />
           </Route>
-          <Route path="/members" element={<Placeholder title="회원 목록" />} />
+          <Route path="users">
+            <Route index element={<UserList />} />
+            <Route path="new" element={<UserForm />} />
+            <Route path=":id" element={<UserView />} />
+            <Route path=":id/edit" element={<UserForm />} />
+          </Route>
           <Route path="/boards/free" element={<Placeholder title="자유게시판" />} />
           <Route path="/products" element={<Placeholder title="상품 목록" />} />
         </Route>

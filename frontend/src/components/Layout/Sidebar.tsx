@@ -13,16 +13,16 @@ const menuItems: MenuItem[] = [
   {
     id: 'member', icon: 'group', label: '회원 관리',
     submenus: [
-      { id: 'member-list', label: '회원 목록', path: '/members' },
-      { id: 'member-grade', label: '회원 등급', path: '/members/grade' },
-      { id: 'member-withdrawn', label: '탈퇴 회원', path: '/members/withdrawn' },
+      { id: 'member-list', label: '회원 목록', path: '/users' },
+      // { id: 'member-grade', label: '회원 등급', path: '/users/grade' },
+      // { id: 'member-withdrawn', label: '탈퇴 회원', path: '/users/withdrawn' },
     ],
   },
   {
     id: 'board', icon: 'forum', label: '게시판 관리',
     submenus: [
       { id: 'notice', label: '공지사항', path: '/notices' },
-      { id: 'free', label: '자유게시판', path: '/boards/free' },
+      // { id: 'free', label: '자유게시판', path: '/boards/free' },
       { id: 'qna', label: 'Q&A', path: '/boards/qna' },
       { id: 'faq', label: 'FAQ', path: '/boards/faq' },
     ],

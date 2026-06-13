@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { createNotice, updateNotice } from '@/api/notice';
 import { useNotice } from '@/hooks/useNotice';
+import AlertModal from '@/components/modal/AlertModal';
 
 type WriteMode = 'create' | 'edit';
 
@@ -26,8 +27,9 @@ export default function NoticeForm() {
     use: 'Y',
   });
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  const [successMsg, setSuccessMsg] = useState('');
+  const [alertMsg, setAlertMsg] = useState('');
+  const [alertVariant, setAlertVariant] = useState<'success' | 'error'>('success');
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   // 수정 모드에서 데이터 로드되면 폼 채우기
   useEffect(() => {
@@ -47,11 +49,11 @@ export default function NoticeForm() {
   const handleSubmit = async (e?: React.SyntheticEvent) => {
     e?.preventDefault();
     if (!form.subject.trim() || !form.content.trim()) {
-      setError('제목과 내용을 입력해주세요.');
+      setAlertMsg('제목과 내용을 입력해주세요.');
+      setAlertVariant('error');
       return;
     }
-    setError('');
-    setSuccessMsg('');
+    setAlertMsg('');
     setSubmitting(true);
     try {
       const payload = { ...form, user_id: 1 };
@@ -61,11 +63,13 @@ export default function NoticeForm() {
       } else {
         result = await createNotice(payload);
       }
-      setSuccessMsg(result.message);
-      setTimeout(() => navigate('/notices'), 1000);
+      setAlertMsg(result.message);
+      setAlertVariant('success');
+      setShouldNavigate(true);
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || '저장에 실패했습니다.';
-      setError(typeof msg === 'string' ? msg : '저장에 실패했습니다. 다시 시도해주세요.');
+      setAlertMsg(typeof msg === 'string' ? msg : '저장에 실패했습니다.');
+      setAlertVariant('error');
     } finally {
       setSubmitting(false);
     }
@@ -113,19 +117,6 @@ export default function NoticeForm() {
       {/* Write Form */}
       <div className="bg-bg-secondary border border-border-color rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.4)]">
         <form id="notice-form" onSubmit={handleSubmit} className="p-8 space-y-6">
-
-          {error && (
-            <div className="px-4 py-3 bg-red-500/10 border border-red-500/30 rounded-lg text-red-400 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined text-base">error</span>
-              {error}
-            </div>
-          )}
-          {successMsg && (
-            <div className="px-4 py-3 bg-emerald-500/10 border border-emerald-500/30 rounded-lg text-emerald-400 text-sm flex items-center gap-2">
-              <span className="material-symbols-outlined text-base">check_circle</span>
-              {successMsg}
-            </div>
-          )}
 
           {/* Status */}
           <div>
@@ -206,6 +197,16 @@ export default function NoticeForm() {
           </button>
         </div>
       </div>
+
+      <AlertModal
+        open={!!alertMsg}
+        message={alertMsg}
+        variant={alertVariant}
+        onClose={() => {
+          setAlertMsg('');
+          if (shouldNavigate) navigate('/notices');
+        }}
+      />
     </>
   );
 }
