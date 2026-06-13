@@ -9,6 +9,9 @@ import UserForm from '@/pages/users/UserForm';
 import QnaList from '@/pages/qnas/QnaList';
 import QnaView from '@/pages/qnas/QnaView';
 import QnaForm from '@/pages/qnas/QnaForm';
+import FaqList from '@/pages/faqs/FaqList';
+import FaqView from '@/pages/faqs/FaqView';
+import FaqForm from '@/pages/faqs/FaqForm';
 
 function Dashboard() {
   return (
@@ -60,6 +63,12 @@ export default function App() {
             <Route path="new" element={<QnaForm />} />
             <Route path=":id" element={<QnaView />} />
             <Route path=":id/edit" element={<QnaForm />} />
+          </Route>
+          <Route path="faqs">
+            <Route index element={<FaqList />} />
+            <Route path="new" element={<FaqForm />} />
+            <Route path=":id" element={<FaqView />} />
+            <Route path=":id/edit" element={<FaqForm />} />
           </Route>
           <Route path="/boards/free" element={<Placeholder title="자유게시판" />} />
           <Route path="/products" element={<Placeholder title="상품 목록" />} />

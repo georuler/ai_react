@@ -24,7 +24,7 @@ const menuItems: MenuItem[] = [
       { id: 'notice', label: '공지사항', path: '/notices' },
       // { id: 'free', label: '자유게시판', path: '/boards/free' },
       { id: 'qna', label: 'Q&A', path: '/qnas' },
-      { id: 'faq', label: 'FAQ', path: '/boards/faq' },
+      { id: 'faq', label: 'FAQ', path: '/faqs' },
     ],
   },
   {
