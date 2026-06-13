@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { useUsers } from '@/hooks/useUsers';
 import apiClient from '@/services/client';
 import AlertModal from '@/components/modal/AlertModal';
@@ -13,6 +14,7 @@ interface UserFormData {
 export default function UserForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const mode = id ? 'edit' : 'create';
   const userId = Number(id);
 
@@ -163,7 +165,10 @@ export default function UserForm() {
         variant={alertVariant}
         onClose={() => {
           setAlertMsg('');
-          if (shouldNavigate) navigate('/users');
+          if (shouldNavigate) {
+            queryClient.invalidateQueries({ queryKey: ['users'] });
+            navigate('/users');
+          };
         }}
       />
     </>

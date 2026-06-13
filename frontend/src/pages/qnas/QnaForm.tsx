@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { createQna, updateQna } from '@/services/qna';
 import { useQna } from '@/hooks/useQna';
 import AlertModal from '@/components/modal/AlertModal';
@@ -15,6 +16,7 @@ interface WriteForm {
 export default function QnaForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const mode: WriteMode = id ? 'edit' : 'create';
   const qnaId = Number(id);
 
@@ -161,7 +163,10 @@ export default function QnaForm() {
         variant={alertVariant}
         onClose={() => {
           setAlertMsg('');
-          if (shouldNavigate) navigate('/qnas');
+          if (shouldNavigate) {
+            queryClient.invalidateQueries({ queryKey: ['qnas'] });
+            navigate('/qnas');
+          };
         }}
       />
     </>

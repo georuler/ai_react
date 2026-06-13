@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { createNotice, updateNotice } from '@/services/notice';
 import { useNotice } from '@/hooks/useNotice';
 import AlertModal from '@/components/modal/AlertModal';
@@ -15,6 +16,7 @@ interface WriteForm {
 export default function NoticeForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const mode: WriteMode = id ? 'edit' : 'create';
   const noticeId = Number(id);
 
@@ -204,7 +206,10 @@ export default function NoticeForm() {
         variant={alertVariant}
         onClose={() => {
           setAlertMsg('');
-          if (shouldNavigate) navigate('/notices');
+          if (shouldNavigate) {
+            queryClient.invalidateQueries({ queryKey: ['notices'] });
+            navigate('/notices');
+          }
         }}
       />
     </>

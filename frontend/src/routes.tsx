@@ -13,6 +13,7 @@ import QnaForm from '@/pages/qnas/QnaForm';
 import FaqList from '@/pages/faqs/FaqList';
 import FaqView from '@/pages/faqs/FaqView';
 import FaqForm from '@/pages/faqs/FaqForm';
+import ProductList from '@/pages/products/ProductList';
 
 function Placeholder({ title }: { title: string }) {
   return (
@@ -58,7 +59,7 @@ export default function AppRoutes() {
           <Route path=":id/edit" element={<FaqForm />} />
         </Route>
         <Route path="/boards/free" element={<Placeholder title="자유게시판" />} />
-        <Route path="/products" element={<Placeholder title="상품 목록" />} />
+          <Route path="/products" element={<ProductList />} />
       </Route>
     </Routes>
   );

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { createFaq, updateFaq } from '@/services/faq';
 import { useFaq } from '@/hooks/useFaq';
 import AlertModal from '@/components/modal/AlertModal';
@@ -15,6 +16,7 @@ interface WriteForm {
 export default function FaqForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const mode: WriteMode = id ? 'edit' : 'create';
   const faqId = Number(id);
 
@@ -152,7 +154,10 @@ export default function FaqForm() {
         variant={alertVariant}
         onClose={() => {
           setAlertMsg('');
-          if (shouldNavigate) navigate('/faqs');
+          if (shouldNavigate) {
+            queryClient.invalidateQueries({ queryKey: ['faqs'] });
+            navigate('/faqs');
+          };
         }}
       />
     </>
