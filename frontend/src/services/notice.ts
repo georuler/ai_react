@@ -30,7 +30,7 @@ export async function createNotice(payload: { subject: string; content: string; 
 
 /** 공지사항 수정 */
 export async function updateNotice(id: number, payload: { subject: string; content: string; use: 'Y' | 'N'; user_id: number }): Promise<{ data: Notice; message: string }> {
-  const { data } = await apiClient.put<{ success: boolean; message: string; data: Notice }>(`/notices/${id}`, { id, ...payload });
+  const { data } = await apiClient.post<{ success: boolean; message: string; data: Notice }>(`/notices/${id}`, { id, ...payload });
   if (!data.success) throw { response: { data: { message: data.message } } };
   return { data: data.data, message: data.message };
 }

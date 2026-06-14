@@ -27,16 +27,16 @@ const menuItems: MenuItem[] = [
       { id: 'faq', label: 'FAQ', path: '/faqs' },
     ],
   },
-  {
-    id: 'product', icon: 'inventory_2', label: '상품 관리',
-    submenus: [
-      { id: 'product-list', label: '상품 목록', path: '/products' },
-      { id: 'category', label: '카테고리', path: '/products/categories' },
-      { id: 'stock', label: '재고 관리', path: '/products/stock' },
-    ],
-  },
-  { id: 'stats', icon: 'bar_chart', label: '통계' },
-  { id: 'settings', icon: 'settings', label: '환경설정' },
+  // {
+  //   id: 'product', icon: 'inventory_2', label: '상품 관리',
+  //   submenus: [
+  //     { id: 'product-list', label: '상품 목록', path: '/products' },
+  //     // { id: 'category', label: '카테고리', path: '/products/categories' },
+  //     // { id: 'stock', label: '재고 관리', path: '/products/stock' },
+  //   ],
+  // },
+  // { id: 'stats', icon: 'bar_chart', label: '통계' },
+  // { id: 'settings', icon: 'settings', label: '환경설정' },
 ];
 
 export default function Sidebar() {

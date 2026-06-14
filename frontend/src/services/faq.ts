@@ -27,7 +27,7 @@ export async function createFaq(payload: { subject: string; content: string; use
 }
 
 export async function updateFaq(id: number, payload: { subject: string; content: string; use: 'Y' | 'N'; user_id: number }): Promise<{ data: Faq; message: string }> {
-  const { data } = await apiClient.put<{ success: boolean; message: string; data: Faq }>(`/faqs/${id}`, { id, ...payload });
+  const { data } = await apiClient.post<{ success: boolean; message: string; data: Faq }>(`/faqs/${id}`, { id, ...payload });
   if (!data.success) throw { response: { data: { message: data.message } } };
   return { data: data.data, message: data.message };
 }

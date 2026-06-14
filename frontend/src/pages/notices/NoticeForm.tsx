@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { createNotice, updateNotice } from '@/services/notice';
+import apiClient from '@/services/client';
 import { useNotice } from '@/hooks/useNotice';
 import AlertModal from '@/components/modal/AlertModal';
 
@@ -29,6 +30,7 @@ export default function NoticeForm() {
     use: 'Y',
   });
   const [submitting, setSubmitting] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [alertMsg, setAlertMsg] = useState('');
   const [alertVariant, setAlertVariant] = useState<'success' | 'error'>('success');
   const [shouldNavigate, setShouldNavigate] = useState(false);
@@ -48,6 +50,18 @@ export default function NoticeForm() {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    setSelectedFiles((prev) => [...prev, ...Array.from(files)]);
+    // input 초기화로 같은 파일 재선택 가능하게
+    e.target.value = '';
+  };
+
+  const removeFile = (index: number) => {
+    setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e?: React.SyntheticEvent) => {
     e?.preventDefault();
     if (!form.subject.trim() || !form.content.trim()) {
@@ -60,10 +74,32 @@ export default function NoticeForm() {
     try {
       const payload = { ...form, user_id: 1 };
       let result: { data: unknown; message: string };
-      if (mode === 'edit' && id) {
-        result = await updateNotice(Number(id), payload);
+
+      if (selectedFiles.length > 0) {
+        // 파일이 있으면 FormData로 전송
+        const formData = new FormData();
+        formData.append('subject', payload.subject);
+        formData.append('content', payload.content);
+        formData.append('use', payload.use);
+        formData.append('user_id', String(payload.user_id));
+        if (mode === 'edit' && id) {
+          formData.append('id', id);
+        }
+        selectedFiles.forEach((file) => formData.append('files[]', file));
+
+        const url = mode === 'edit' && id ? `/notices/${id}` : '/notices';
+        const { data } = await apiClient.post<{ success: boolean; message: string; data: unknown }>(url, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        if (!data.success) throw { response: { data: { message: data.message } } };
+        result = { data: data.data, message: data.message };
       } else {
-        result = await createNotice(payload);
+        // 파일 없으면 기존 JSON 방식
+        if (mode === 'edit' && id) {
+          result = await updateNotice(Number(id), payload);
+        } else {
+          result = await createNotice(payload);
+        }
       }
       setAlertMsg(result.message);
       setAlertVariant('success');
@@ -172,10 +208,27 @@ export default function NoticeForm() {
           {/* File Upload */}
           <div>
             <label className="block text-sm font-semibold text-[#9ca3b8] mb-2">첨부파일</label>
+            {/* 선택된 파일 목록 */}
+            {selectedFiles.length > 0 && (
+              <ul className="mb-3 space-y-1.5">
+                {selectedFiles.map((file, i) => (
+                  <li key={`${file.name}-${i}`} className="flex items-center justify-between gap-2 px-3 py-2 bg-bg-tertiary border border-border-color rounded-lg text-sm text-[#e8eaf0]">
+                    <span className="flex items-center gap-2 truncate">
+                      <span className="material-symbols-outlined text-base text-[#9ca3b8] shrink-0">description</span>
+                      <span className="truncate">{file.name}</span>
+                      <span className="text-[#6b7280] text-xs shrink-0">({(file.size / 1024).toFixed(1)} KB)</span>
+                    </span>
+                    <button type="button" onClick={() => removeFile(i)} className="shrink-0 w-6 h-6 flex items-center justify-center rounded text-[#9ca3b8] hover:text-red-400 hover:bg-red-400/10 transition-colors">
+                      <span className="material-symbols-outlined text-base">close</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
             <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-border-color rounded-lg cursor-pointer hover:border-border-light hover:bg-bg-tertiary transition-all text-sm text-[#6b7280] hover:text-[#9ca3b8]">
               <span className="material-symbols-outlined text-lg">cloud_upload</span>
               파일 첨부하기
-              <input type="file" multiple className="hidden" />
+              <input type="file" id="file-upload" name="files[]" multiple className="hidden" onChange={handleFileChange} />
             </label>
           </div>
 
